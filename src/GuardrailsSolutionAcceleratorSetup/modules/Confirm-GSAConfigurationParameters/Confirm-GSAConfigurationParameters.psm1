@@ -288,12 +288,12 @@ Function Confirm-GSAConfigurationParameters {
         # Change to Option 1 before version release; using Option 2 for this issue update
 
         # Option: 1
-        # $latestRelease = Invoke-RestMethod 'https://api.github.com/repos/ssc-spc-ccoe-cei/azure-guardrails-solution-accelerator/releases/latest' -Verbose:$false
-        # $departmentListFileURI = "https://github.com/ssc-spc-ccoe-cei/azure-guardrails-solution-accelerator/raw/{0}/setup/departmentList.csv" -f $latestRelease.name
+        # $latestRelease = Invoke-RestMethod 'https://api.github.com/repos/ssc-spc-ccoe-cei/workshop-test-azure-cac/releases/latest' -Verbose:$false
+        # $departmentListFileURI = "https://github.com/ssc-spc-ccoe-cei/workshop-test-azure-cac/raw/{0}/setup/departmentList.csv" -f $latestRelease.name
         
         # Option: 2
         # fetch updated list from main branch
-        $departmentListFileURI = "https://raw.githubusercontent.com/ssc-spc-ccoe-cei/azure-guardrails-solution-accelerator/main/setup/departmentList.csv"
+        $departmentListFileURI = "https://raw.githubusercontent.com/ssc-spc-ccoe-cei/workshop-test-azure-cac/main/setup/departmentList.csv"
         
         $response = Invoke-RestMethod -Method GET -Uri $departmentListFileURI -StatusCodeVariable statusCode -ErrorAction Stop -ResponseHeadersVariable h  
     }   
