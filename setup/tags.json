@@ -1,12 +1,8 @@
 [     
     {
         "Solution":"Guardrails Accelerator",
-<<<<<<< HEAD
-        "ReleaseVersion": "v3.0.1test",
-=======
-        "ReleaseVersion": "v3.0.0test",
->>>>>>> main
-        "ReleaseDate": "2026/04/15"
+        "ReleaseVersion": "v4.0.0test1",
+        "ReleaseDate": "2026/04/23"
     }
     
 ]
