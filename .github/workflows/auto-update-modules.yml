@@ -2,7 +2,9 @@ name: Auto Update Modules On Merge
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    types:
+      - closed
     paths:
       - 'setup/tags.json'
     branches:
@@ -14,6 +16,7 @@ env:
 jobs:
   sign_scripts:
     name: Sign, validate, test and publish PowerShell scripts
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
     runs-on: windows-latest
     environment: test
     permissions:
@@ -22,6 +25,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name }}
       - name: Install AzureSignTool
         if: ${{ false }}
         run: dotnet tool install --no-cache --global AzureSignTool --version 6.0.1
@@ -139,6 +144,7 @@ jobs:
 
   create-pr:
     needs: sign_scripts
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -147,6 +153,8 @@ jobs:
     steps:
       - name: Check Out
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.ref || github.ref_name }}
       - name: Download zipped modules and replace old ones
         uses: actions/download-artifact@v4
         with:
@@ -161,7 +169,11 @@ jobs:
           # Releases are now prepared from release/* branches instead of always from main.
           # Use the branch that triggered this workflow so regenerated module zips are PR'd
           # back into the same release branch before the release tag is created.
-          target_branch="${GITHUB_REF_NAME}"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            target_branch="${{ github.event.pull_request.base.ref }}"
+          else
+            target_branch="${GITHUB_REF_NAME}"
+          fi
 
           # Manual workflow runs can still be started from the wrong branch in GitHub.
           # Keep this workflow limited to the normal development branch and release branches.
