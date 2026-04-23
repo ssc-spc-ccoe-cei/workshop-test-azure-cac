@@ -88,6 +88,7 @@ jobs:
   deploy:
     name: Deploy CAC to a tenant
     needs: sign_and_publish_scripts
+    if: ${{ false }}
     runs-on: ubuntu-latest
     environment: test
     steps:

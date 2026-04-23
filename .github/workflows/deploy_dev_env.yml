@@ -18,8 +18,17 @@ env:
   ARTIFACT_NAME: PowerShell.Workflows.ScriptSigning
 
 jobs:
+  skip-deploy:
+    name: Skip Dev deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain why deployment is skipped
+        run: |
+          echo "Dev deployment is disabled in the workshop repo."
+
   sign-scripts:
     name: Validate, test and publish Powershell scripts as pipeline artifacts
+    if: ${{ false }}
     runs-on: windows-latest
     environment: test
     steps:
@@ -81,6 +90,7 @@ jobs:
   deploy:
     name: Deploy CaC to Dev Tenant
     needs: sign-scripts
+    if: ${{ false }}
     runs-on: ubuntu-latest
     environment: dev
     steps:
